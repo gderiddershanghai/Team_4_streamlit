@@ -1,7 +1,10 @@
-streamlit
-pandas
-sklearn
+# streamlit
+# pandas
+# sklearn
 seaborn
 matplotlib
 xgboost
 numpy
+streamlit==1.33.0
+pandas==1.3.4
+scikit-learn==0.24.2
