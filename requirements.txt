@@ -8,3 +8,5 @@ numpy
 streamlit
 pandas
 scikit-learn
+imblearn
+imbalanced-learn
