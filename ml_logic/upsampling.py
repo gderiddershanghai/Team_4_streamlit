@@ -39,7 +39,8 @@ def upsample_data(X_train=None, y_train=None, method='none', random_state=1):
         sampler = SMOTE(random_state=random_state)
     # Conditional GAN for synthetic data generation
     elif method == 'cgan':
-        cgan_fp = '../Data/gan_generated_df.csv'  # File path to CGAN-generated data
+
+        cgan_fp = 'ml_logic/gan_generated_df.csvv'  # File path to CGAN-generated data
         cgan_df = pd.read_csv(cgan_fp)
         cols = X_train.columns
         # Split CGAN data into features and target variable based on the original data columns

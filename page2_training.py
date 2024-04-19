@@ -15,29 +15,6 @@ from sklearn.metrics import classification_report, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# def display_classification_metrics(predictions):
-#     accuracy = accuracy_score(st.session_state['y_test'], predictions)
-#     precision = precision_score(st.session_state['y_test'], predictions, zero_division=0)
-#     recall = recall_score(st.session_state['y_test'], predictions, zero_division=0)
-#     f1 = f1_score(st.session_state['y_test'], predictions, zero_division=0)
-
-#     col1, col2, col3, col4 = st.columns(4)
-#     col1.metric("Accuracy", f"{accuracy:.2%}")
-#     col2.metric("Precision", f"{precision:.2%}")
-#     col3.metric("Recall", f"{recall:.2%}")
-#     col4.metric("F1 Score", f"{f1:.2%}")
-
-
-# def show_metrics_and_confusion_matrix():
-#     if 'probabilities' in st.session_state:
-#         threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.01)
-#         predictions = (st.session_state['probabilities'] >= threshold).astype(int)
-#     elif 'predictions' in st.session_state:
-#         predictions = st.session_state['predictions']
-
-#     # Calculate and display metrics
-#     display_classification_metrics(predictions)
-
 def show_results():
     if 'probabilities' in st.session_state:
         threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.01)
@@ -158,253 +135,95 @@ st.markdown("---")
 model = st.radio("Select the model you want to use:",
                  ['Logistic Regression', 'Random Forest', 'KNN Classifier', 'SVM Classifier', 'XGBoost'])
 
-# Submit button for model training
-if st.button('Train Model', key=f'train_{model}'):
-    # Initialize the selected model
-    if model == 'Logistic Regression':
-        trained_model = LogisticRegression()
-    elif model == 'Random Forest':
-        trained_model = RandomForestClassifier()
-    elif model == 'KNN Classifier':
-        trained_model = KNeighborsClassifier()
-    elif model == 'SVM Classifier':
-        trained_model = SVC(probability=True)  # Ensure to enable probability for SVC
-    elif model == 'XGBoost':
-        trained_model = XGBClassifier()
+if 'X_train_resampled' in st.session_state:
+    # Submit button for model training
+    if st.button('Train Model', key=f'train_{model}'):
+        # Initialize the selected model
+        if model == 'Logistic Regression':
+            trained_model = LogisticRegression()
+        elif model == 'Random Forest':
+            trained_model = RandomForestClassifier()
+        elif model == 'KNN Classifier':
+            trained_model = KNeighborsClassifier()
+        elif model == 'SVM Classifier':
+            trained_model = SVC(probability=True)  # Ensure to enable probability for SVC
+        elif model == 'XGBoost':
+            trained_model = XGBClassifier()
 
-    # Fit the model
-    trained_model.fit(st.session_state['X_train_resampled'], st.session_state['y_train_resampled'])
+        # Fit the model
+        trained_model.fit(st.session_state['X_train_resampled'], st.session_state['y_train_resampled'])
 
-    # Post-training actions
-    if model in ['Logistic Regression', 'SVM Classifier']:
-        # These models support probability estimates
-        probabilities = trained_model.predict_proba(st.session_state['X_test'])[:, 1]
-        st.session_state['probabilities'] = probabilities
-        st.success("Model trained. Adjust the threshold slider to see changes in the confusion matrix.")
-    else:
-        # These models do not support probability estimates by default
-        predictions = trained_model.predict(st.session_state['X_test'])
-        st.session_state['predictions'] = predictions
-        st.success("Model trained. View predictions and metrics below.")
+        # Post-training actions
+        if model in ['Logistic Regression', 'SVM Classifier']:
+            # These models support probability estimates
+            probabilities = trained_model.predict_proba(st.session_state['X_test'])[:, 1]
+            st.session_state['probabilities'] = probabilities
+            st.success("Model trained. Adjust the threshold slider to see changes in the confusion matrix.")
+        else:
+            # These models do not support probability estimates by default
+            predictions = trained_model.predict(st.session_state['X_test'])
+            st.session_state['predictions'] = predictions
+            st.success("Model trained. View predictions and metrics below.")
 
-    # Show additional results or metrics
-    if 'probabilities' in st.session_state or 'predictions' in st.session_state:
-
-        thresholds = np.linspace(0, 1, 50)
-
-        # Lists to store the metrics for each threshold
-        accuracies = []
-        precisions = []
-        recalls = []
-        f1_scores = []
-
-        # Calculate metrics for each threshold
-        for threshold in thresholds:
-            predictions = (st.session_state['probabilities'] >= threshold).astype(int)
-            accuracies.append(accuracy_score(st.session_state['y_test'], predictions))
-            precisions.append(precision_score(st.session_state['y_test'], predictions, zero_division=0))
-            recalls.append(recall_score(st.session_state['y_test'], predictions, zero_division=0))
-            f1_scores.append(f1_score(st.session_state['y_test'], predictions, zero_division=0))
-
-        # Create a plot
-        plt.figure(figsize=(10, 6))
-        plt.plot(thresholds, accuracies, label='Accuracy')
-        plt.plot(thresholds, precisions, label='Precision')
-        plt.plot(thresholds, recalls, label='Recall')
-        plt.plot(thresholds, f1_scores, label='F1 Score')
-        plt.title('Metrics as a function of the decision threshold')
-        plt.xlabel('Threshold')
-        plt.ylabel('Metric Value')
-        plt.legend()
-        plt.grid(True)
-
-        # Show the plot in Streamlit
-        st.pyplot(plt)
+# Show additional results or metrics
+if 'probabilities' in st.session_state:
 
 
-        threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.05)
+    threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.05)
+    predictions = (st.session_state['probabilities'] >= threshold).astype(int)
+
+    # Calculate metrics
+    accuracy = accuracy_score(st.session_state['y_test'], predictions)
+    precision = precision_score(st.session_state['y_test'], predictions, zero_division=0)
+    recall = recall_score(st.session_state['y_test'], predictions, zero_division=0)
+    f1 = f1_score(st.session_state['y_test'], predictions, zero_division=0)
+
+    # Display metrics in columns
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Accuracy", f"{accuracy:.2%}")
+    col2.metric("Precision", f"{precision:.2%}")
+    col3.metric("Recall", f"{recall:.2%}")
+    col4.metric("F1 Score", f"{f1:.2%}")
+
+    # Confusion matrix visualization
+    cm = confusion_matrix(st.session_state['y_test'], predictions)
+    fig, ax = plt.subplots()
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
+    ax.set_title('Confusion Matrix')
+    ax.set_xlabel('Predicted Labels')
+    ax.set_ylabel('True Labels')
+    ax.xaxis.set_ticklabels(['Negative', 'Positive'])
+    ax.yaxis.set_ticklabels(['Negative', 'Positive'])
+    st.pyplot(fig)
+
+
+    thresholds = np.linspace(0, 1, 50)
+
+    # Lists to store the metrics for each threshold
+    accuracies = []
+    precisions = []
+    recalls = []
+    f1_scores = []
+
+    # Calculate metrics for each threshold
+    for threshold in thresholds:
         predictions = (st.session_state['probabilities'] >= threshold).astype(int)
+        accuracies.append(accuracy_score(st.session_state['y_test'], predictions))
+        precisions.append(precision_score(st.session_state['y_test'], predictions, zero_division=0))
+        recalls.append(recall_score(st.session_state['y_test'], predictions, zero_division=0))
+        f1_scores.append(f1_score(st.session_state['y_test'], predictions, zero_division=0))
 
-        # Calculate metrics
-        accuracy = accuracy_score(st.session_state['y_test'], predictions)
-        precision = precision_score(st.session_state['y_test'], predictions, zero_division=0)
-        recall = recall_score(st.session_state['y_test'], predictions, zero_division=0)
-        f1 = f1_score(st.session_state['y_test'], predictions, zero_division=0)
+    # Create a plot
+    plt.figure(figsize=(10, 6))
+    plt.plot(thresholds, accuracies, label='Accuracy')
+    plt.plot(thresholds, precisions, label='Precision')
+    plt.plot(thresholds, recalls, label='Recall')
+    plt.plot(thresholds, f1_scores, label='F1 Score')
+    plt.title('Metrics as a function of the decision threshold')
+    plt.xlabel('Threshold')
+    plt.ylabel('Metric Value')
+    plt.legend()
+    plt.grid(True)
 
-        # Display metrics in columns
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Accuracy", f"{accuracy:.2%}")
-        col2.metric("Precision", f"{precision:.2%}")
-        col3.metric("Recall", f"{recall:.2%}")
-        col4.metric("F1 Score", f"{f1:.2%}")
-
-        # Confusion matrix visualization
-        cm = confusion_matrix(st.session_state['y_test'], predictions)
-        fig, ax = plt.subplots()
-        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
-        ax.set_title('Confusion Matrix')
-        ax.set_xlabel('Predicted Labels')
-        ax.set_ylabel('True Labels')
-        ax.xaxis.set_ticklabels(['Negative', 'Positive'])
-        ax.yaxis.set_ticklabels(['Negative', 'Positive'])
-        st.pyplot(fig)
-
-
-
-# def show_metrics_and_confusion_matrix():
-#     if 'probabilities' in st.session_state:
-#         threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.01)
-#         predictions = (st.session_state['probabilities'] >= threshold).astype(int)
-#     elif 'predictions' in st.session_state:
-#         predictions = st.session_state['predictions']
-
-#     # Calculate and display metrics
-#     display_classification_metrics(predictions)
-
-# def display_classification_metrics(predictions):
-#     accuracy = accuracy_score(st.session_state['y_test'], predictions)
-#     precision = precision_score(st.session_state['y_test'], predictions, zero_division=0)
-#     recall = recall_score(st.session_state['y_test'], predictions, zero_division=0)
-#     f1 = f1_score(st.session_state['y_test'], predictions, zero_division=0)
-
-#     col1, col2, col3, col4 = st.columns(4)
-#     col1.metric("Accuracy", f"{accuracy:.2%}")
-#     col2.metric("Precision", f"{precision:.2%}")
-#     col3.metric("Recall", f"{recall:.2%}")
-#     col4.metric("F1 Score", f"{f1:.2%}")
-
-
-
-
-# # Model information dictionary
-# model_info = {
-#     "Logistic Regression": "A linear model for classification rather than regression. It is useful for binary classification tasks.",
-#     "Random Forest": "An ensemble learning method for classification, regression, and other tasks that operates by constructing a multitude of decision trees.",
-#     "KNN Classifier": "A simple, instance-based learning algorithm where the class of a sample is determined by the majority class among its k nearest neighbors.",
-#     "SVM Classifier": "Support Vector Machine Classifier. A powerful, flexible, and robust model for both linear and nonlinear classification tasks.",
-#     "XGBoost": "An implementation of gradient boosted decision trees designed for speed and performance that is dominant competitive machine learning."
-# }
-
-# if 'X_train_resampled' in st.session_state:
-#     col1, col2 = st.columns([1, 2])
-
-#     with col1:
-#         model = st.radio("Select the model you want to use:", list(model_classes.keys()))
-
-#     with col2:
-#         st.write("Model Information:")
-#         st.write(model_info[model])
-
-#     if st.button('Train Model', key=f'train_{model}'):
-#         try:
-#             trained_model = model_classes[model]()
-#             trained_model.fit(st.session_state['X_train_resampled'], st.session_state['y_train_resampled'])
-
-#             # Handle probability-based models
-#             if model in ['Logistic Regression', 'SVM Classifier']:
-#                 st.session_state['probabilities'] = trained_model.predict_proba(st.session_state['X_test'])[:, 1]
-#                 st.session_state['model_trained'] = True
-#                 st.success("Model trained. Use the slider below to adjust the decision threshold.")
-#                 print("Probabilities:", st.session_state['probabilities'][:10])  # Debugging print
-
-#             # Handle non-probability models
-#             else:
-#                 st.session_state['predictions'] = trained_model.predict(st.session_state['X_test'])
-#                 st.session_state['model_trained'] = True
-#                 st.success("Model trained.")
-
-#         except Exception as e:
-#             st.error(f"An error occurred while training the model: {str(e)}")
-
-#     if 'model_trained' in st.session_state and st.session_state['model_trained'] and model in ['Logistic Regression', 'SVM Classifier']:
-#         show_results()
-
-#         # thresholds = np.linspace(0, 1, 50)
-
-#         # # Lists to store the metrics for each threshold
-#         # accuracies = []
-#         # precisions = []
-#         # recalls = []
-#         # f1_scores = []
-
-#         # # Calculate metrics for each threshold
-#         # for threshold in thresholds:
-#         #     predictions = (st.session_state['probabilities'] >= threshold).astype(int)
-#         #     accuracies.append(accuracy_score(st.session_state['y_test'], predictions))
-#         #     precisions.append(precision_score(st.session_state['y_test'], predictions, zero_division=0))
-#         #     recalls.append(recall_score(st.session_state['y_test'], predictions, zero_division=0))
-#         #     f1_scores.append(f1_score(st.session_state['y_test'], predictions, zero_division=0))
-
-#         # # Create a plot
-#         # plt.figure(figsize=(10, 6))
-#         # plt.plot(thresholds, accuracies, label='Accuracy')
-#         # plt.plot(thresholds, precisions, label='Precision')
-#         # plt.plot(thresholds, recalls, label='Recall')
-#         # plt.plot(thresholds, f1_scores, label='F1 Score')
-#         # plt.title('Metrics as a function of the decision threshold')
-#         # plt.xlabel('Threshold')
-#         # plt.ylabel('Metric Value')
-#         # plt.legend()
-#         # plt.grid(True)
-
-#         # # Show the plot in Streamlit
-#         # st.pyplot(plt)
-
-
-#         # threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.05)
-#         # predictions = (st.session_state['probabilities'] >= threshold).astype(int)
-
-#         # # Calculate metrics
-#         # accuracy = accuracy_score(st.session_state['y_test'], predictions)
-#         # precision = precision_score(st.session_state['y_test'], predictions, zero_division=0)
-#         # recall = recall_score(st.session_state['y_test'], predictions, zero_division=0)
-#         # f1 = f1_score(st.session_state['y_test'], predictions, zero_division=0)
-
-#         # # Display metrics in columns
-#         # col1, col2, col3, col4 = st.columns(4)
-#         # col1.metric("Accuracy", f"{accuracy:.2%}")
-#         # col2.metric("Precision", f"{precision:.2%}")
-#         # col3.metric("Recall", f"{recall:.2%}")
-#         # col4.metric("F1 Score", f"{f1:.2%}")
-
-#         # # Confusion matrix visualization
-#         # cm = confusion_matrix(st.session_state['y_test'], predictions)
-#         # fig, ax = plt.subplots()
-#         # sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
-#         # ax.set_title('Confusion Matrix')
-#         # ax.set_xlabel('Predicted Labels')
-#         # ax.set_ylabel('True Labels')
-#         # ax.xaxis.set_ticklabels(['Negative', 'Positive'])
-#         # ax.yaxis.set_ticklabels(['Negative', 'Positive'])
-#         # st.pyplot(fig)
-
-#         # thresholds = np.linspace(0, 1, 50)
-
-#         # # Lists to store the metrics for each threshold
-#         # accuracies = []
-#         # precisions = []
-#         # recalls = []
-#         # f1_scores = []
-
-#         # # Calculate metrics for each threshold
-#         # for threshold in thresholds:
-#         #     predictions = (st.session_state['probabilities'] >= threshold).astype(int)
-#         #     accuracies.append(accuracy_score(st.session_state['y_test'], predictions))
-#         #     precisions.append(precision_score(st.session_state['y_test'], predictions, zero_division=0))
-#         #     recalls.append(recall_score(st.session_state['y_test'], predictions, zero_division=0))
-#         #     f1_scores.append(f1_score(st.session_state['y_test'], predictions, zero_division=0))
-
-#         # # Create a plot
-#         # plt.figure(figsize=(10, 6))
-#         # plt.plot(thresholds, accuracies, label='Accuracy')
-#         # plt.plot(thresholds, precisions, label='Precision')
-#         # plt.plot(thresholds, recalls, label='Recall')
-#         # plt.plot(thresholds, f1_scores, label='F1 Score')
-#         # plt.title('Metrics as a function of the decision threshold')
-#         # plt.xlabel('Threshold')
-#         # plt.ylabel('Metric Value')
-#         # plt.legend()
-#         # plt.grid(True)
-
-#         # # Show the plot in Streamlit
-#         # st.pyplot(plt)
+    # Show the plot in Streamlit
+    st.pyplot(plt)
