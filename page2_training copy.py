@@ -227,31 +227,3 @@ if 'probabilities' in st.session_state:
 
     # Show the plot in Streamlit
     st.pyplot(plt)
-
-
-    # threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.05)
-    # predictions = (st.session_state['probabilities'] >= threshold).astype(int)
-
-    # # Calculate metrics
-    # accuracy = accuracy_score(st.session_state['y_test'], predictions)
-    # precision = precision_score(st.session_state['y_test'], predictions, zero_division=0)
-    # recall = recall_score(st.session_state['y_test'], predictions, zero_division=0)
-    # f1 = f1_score(st.session_state['y_test'], predictions, zero_division=0)
-
-    # # Display metrics in columns
-    # col1, col2, col3, col4 = st.columns(4)
-    # col1.metric("Accuracy", f"{accuracy:.2%}")
-    # col2.metric("Precision", f"{precision:.2%}")
-    # col3.metric("Recall", f"{recall:.2%}")
-    # col4.metric("F1 Score", f"{f1:.2%}")
-
-    # # Confusion matrix visualization
-    # cm = confusion_matrix(st.session_state['y_test'], predictions)
-    # fig, ax = plt.subplots()
-    # sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
-    # ax.set_title('Confusion Matrix')
-    # ax.set_xlabel('Predicted Labels')
-    # ax.set_ylabel('True Labels')
-    # ax.xaxis.set_ticklabels(['Negative', 'Positive'])
-    # ax.yaxis.set_ticklabels(['Negative', 'Positive'])
-    # st.pyplot(fig)
