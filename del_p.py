@@ -16,7 +16,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 def custom_training():
-    plt.xkcd()
     def show_results():
         if 'probabilities' in st.session_state:
             threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.01)
@@ -215,7 +214,7 @@ def custom_training():
             precisions.append(precision_score(st.session_state['y_test'], predictions, zero_division=0))
             recalls.append(recall_score(st.session_state['y_test'], predictions, zero_division=0))
             f1_scores.append(f1_score(st.session_state['y_test'], predictions, zero_division=0))
-
+        plt.style.use('fivethirtyeight')
         # Create a plot
         plt.figure(figsize=(10, 6))
         plt.plot(thresholds, accuracies, label='Accuracy')

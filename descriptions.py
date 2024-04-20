@@ -10,37 +10,54 @@ def upsampling_description():
 
     # Random Over-Sampling
     st.subheader("Random Over-Sampling")
-    st.image("/Data/random_upsampling.png", caption="Random Over-Sampling")
+    st.image("Data/random_upsampling.png", caption="Random Over-Sampling")
     st.write("This technique duplicates instances from the minority class, such as attrition events, to even out the class distribution. While straightforward, it risks overfitting since the additional instances are just copies and don’t provide new information.")
 
     # Random Under-Sampling
     st.subheader("Random Under-Sampling")
-    st.image("/Data/down_sampling.png", caption="Random Under-Sampling")
+    st.image("Data/down_sampling.png", caption="Random Under-Sampling")
     st.write("This method reduces the number of instances in the majority class by removing them randomly. It balances the class distribution but can lead to the loss of potentially valuable data, as it indiscriminately discards instances.")
 
     # SMOTE
     st.subheader("SMOTE (Synthetic Minority Over-sampling Technique)")
-    st.image("/Data/smote.png", caption="SMOTE")
+    st.image("Data/smote.png", caption="SMOTE")
     st.write("SMOTE creates new, synthetic instances by interpolating between existing instances in the minority class and their nearest neighbors. This enhances the diversity of the minority class with new, unique examples, thereby decreasing the risk of overfitting.")
 
     # Conditional Generative Adversarial Networks (cGANs)
     st.subheader("Conditional Generative Adversarial Networks (cGANs)")
-    st.image("/Data/cgan.png", caption="cGANs")
+    st.image("Data/cgan.png", caption="cGANs")
     st.write("cGANs use two models—a generator and a discriminator—that work against each other to produce new, synthetic instances of the minority class. The generator creates new data points while the discriminator evaluates their authenticity. This method not only generates diverse and realistic samples but also helps in significantly enhancing the training dataset without repeating existing instances.")
 
+import streamlit as st
+import streamlit as st
 
 def model_description():
     st.title("Model Descriptions")
     st.markdown("""
-    Explore the predictive models employed in our analysis, each handpicked for its unique strengths and ability to tackle specific aspects of the data:
-
-    - **Logistic Regression**: A robust statistical model that excels at binary classification problems, estimating the probability of an outcome based on input features.
-
-    - **Random Forest**: An ensemble powerhouse that constructs multiple decision trees and combines their predictions for enhanced accuracy in classification, regression, and beyond.
-
-    - **Support Vector Machine (SVM)**: A versatile and powerful classifier that ingeniously finds the optimal hyperplane to separate data classes with maximum margin.
-
-    - **K-Nearest Neighbors (KNN)**: An intuitive, non-parametric approach that classifies samples based on the majority vote of their nearest neighbors, leveraging similarity for prediction.
-
-    - **XGBoost**: A high-performance implementation of gradient boosted decision trees, renowned for its speed and precision, often at the forefront of data science competitions.
+    Learn how different predictive models work, each designed for its strengths in analyzing various aspects of nurse attrition data:
     """)
+
+    # Logistic Regression
+    st.subheader("Logistic Regression")
+    st.image("Data/log_reg_xkcd.png")
+    st.write("Think of Logistic Regression as weighing scales. It considers different job factors (like workload, satisfaction) and tips towards predicting if a nurse will stay or leave. It’s great for yes/no outcomes, making it ideal for deciding if a nurse might quit.")
+
+    # Support Vector Machine (SVM)
+    st.subheader("Support Vector Machine (SVM)")
+    st.image("Data/svm_xkcd.png")
+    st.write("SVM finds the best boundary that separates nurses who stay from those who leave. Imagine drawing the widest possible road between two groups of people; SVM works similarly to ensure clear separation in complex situations.")
+
+    # K-Nearest Neighbors (KNN)
+    st.subheader("K-Nearest Neighbors (KNN)")
+    st.image("Data/knn_xkcd.png")
+    st.write("KNN looks at a nurse and their nearest co-workers to predict behavior. If many close colleagues have quit, KNN assumes this nurse might too. It’s like predicting someone’s next step by looking at their friends’ choices.")
+
+    # Random Forest
+    st.subheader("Random Forest")
+    st.image("Data/random_forest_xkcd.png")
+    st.write("Random Forest uses a team of decision trees that each look at the data differently. By combining their decisions, it makes a more accurate and robust prediction than any single tree could, much like a wise council making a joint decision.")
+
+    # XGBoost
+    st.subheader("XGBoost")
+    st.image("Data/xgboost_xkcd.png") #, caption="XGBoost")
+    st.write("XGBoost works like a team refining ideas through quick, iterative updates. Each model learns from the mistakes of the one before, gradually improving predictions. It's fast and accurate, making it a favorite in many data challenges.")

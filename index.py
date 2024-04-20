@@ -3,21 +3,23 @@ from del_p import custom_training
 from page1_eda import custom_eda
 from descriptions import upsampling_description, model_description
 
-st.set_page_config(layout="wide", page_title="Team 4's Project", page_icon=":pencil:")
+st.set_page_config(layout="wide", page_title="Team 4's Project")
 
 
 def intro():
-    st.write("# Welcome to Team 4's Project! 👋")
-    st.sidebar.success("Select a section begin.")
+    st.write("# Welcome to Team 4's Nurse Attrition Analysis Project 🏥")
+    st.sidebar.success("Select a section to begin.")
 
     st.markdown("""
-    Welcome to the interactive component of Team 4's Nurse Attrition Analysis project! This tool is crafted to assist in exploring various aspects of model training and the impact of different techniques on predicting nurse attrition. The following features are included:
+    Welcome to the interactive component of Team 4's Nurse Attrition Analysis project, aimed at understanding and addressing nurse turnover in the U.S. healthcare system. This tool allows you to explore how different models and techniques can predict and potentially prevent nurse attrition. The following features are included:
 
-    1. **Data Exploration**: Delve into the synthetic dataset designed to reflect realistic nurse attrition scenarios in healthcare. Use this module to understand the data's characteristics and how they correlate with attrition rates.
-    2. **Upsampling Techniques Overview**: Explore different methods such as Random Over and Under Sampling, SMOTE (Synthetic Minority Over-sampling Technique), and CGANs (Conditional Generative Adversarial Networks) to balance the dataset.
-    3. **Model Overview**: Learn about various models used, including Logistic Regression, Random Forest, SVM (Support Vector Machine), KNN (K-Nearest Neighbors), and XGBoost.
-    4. **Model Training Simulator**: Experiment with different models, thresholds, and upsampling techniques to see how they influence prediction outcomes. This feature allows you to adjust parameters and instantly visualize the effects.
+    1. **Data Exploration**: Dive into the synthetic dataset tailored to simulate realistic scenarios of nurse attrition in healthcare. Understand key variables like job satisfaction, workload, and career opportunities that correlate with attrition rates.
+    2. **Upsampling Techniques Overview**: Examine methods such as Random Over and Under Sampling, SMOTE, and CGANs to balance the dataset, ensuring fair representation across all classes.
+    3. **Model Overview**: Discover how various predictive models, including Logistic Regression, Random Forest, SVM, KNN, and XGBoost, are used to analyze factors influencing nurse retention.
+    4. **Model Training Simulator**: Test different models, thresholds, and upsampling techniques to see their effects on prediction outcomes, offering a hands-on experience with the tools used in our research.
 
+    **Project Context**
+    The high rate of nurse turnover has significant implications for patient care quality and operational efficiency in healthcare facilities. With nearly 4 million nurses in the U.S. and an anticipated need for over 275,000 more by 2030, understanding and curbing nurse attrition is vital. Our project, backed by a comprehensive analysis of various factors that contribute to nurse turnover, seeks to provide actionable insights for healthcare providers to develop effective retention strategies, thus improving outcomes and reducing costs associated with nurse turnover.
     """)
 
 
@@ -36,10 +38,10 @@ def page_4_train():
 
 
 page_names_to_funcs = {
-    "—": intro,
-    "EDA": page_1_eda,
+    "Home": intro,
+    "Exploratory Data Analysis": page_1_eda,
     "Upsampling Explained": page_2_upsampling,
-    "Model description": page_3_modeling,
+    "Model Description": page_3_modeling,
     "Train your own Model": page_4_train,
 }
 

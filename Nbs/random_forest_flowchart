@@ -1,0 +1,24 @@
+// Random Forest
+digraph {
+	edge [arrowhead=vee arrowsize=1 color=blue]
+	A [label="Start
+(Input Features)" shape=ellipse]
+	B [label="Decision Tree 1
+(Random subset of features)" shape=box]
+	C [label="Decision Tree 2
+(Random subset of features)" shape=box]
+	D [label="Decision Tree 3
+(Random subset of features)" shape=box]
+	E [label="Votes from all
+Decision Trees" shape=ellipse]
+	F [label="Output
+(Final Prediction)" shape=ellipse]
+	A -> B
+	A -> C
+	A -> D
+	B -> E
+	C -> E
+	D -> E
+	E -> F
+	rankdir=TB size="10,5"
+}
