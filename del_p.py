@@ -16,6 +16,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 def custom_training():
+    plt.xkcd()
     def show_results():
         if 'probabilities' in st.session_state:
             threshold = st.slider('Set Decision Threshold', 0.0, 1.0, 0.5, 0.01)
