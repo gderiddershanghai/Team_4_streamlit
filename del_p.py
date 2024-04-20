@@ -132,11 +132,12 @@ def custom_training():
     st.markdown("---")
 
 
-    # Define your model selection UI somewhere above this code
-    model = st.radio("Select the model you want to use:",
-                    ['Logistic Regression', 'Random Forest', 'KNN Classifier', 'SVM Classifier', 'XGBoost'])
 
     if 'X_train_resampled' in st.session_state:
+
+            # Define your model selection UI somewhere above this code
+        model = st.radio("Select the model you want to use:",
+                        ['Logistic Regression', 'Random Forest', 'KNN Classifier', 'SVM Classifier', 'XGBoost'])
         # Submit button for model training
         if st.button('Train Model', key=f'train_{model}'):
             # Initialize the selected model
