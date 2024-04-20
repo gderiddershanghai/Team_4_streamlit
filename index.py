@@ -38,7 +38,7 @@ def page_4_train():
 page_names_to_funcs = {
     "—": intro,
     "EDA": page_1_eda,
-    "Upsampling Explained": page_1_eda,
+    "Upsampling Explained": page_2_upsampling,
     "Model description": page_3_modeling,
     "Train your own Model": page_4_train,
 }
