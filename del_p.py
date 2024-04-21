@@ -163,8 +163,12 @@ def custom_training():
                 st.success("Model trained. Adjust the threshold slider to see changes in the confusion matrix.")
             else:
                 # These models do not support probability estimates by default
-                predictions = trained_model.predict(st.session_state['X_test'])
-                st.session_state['predictions'] = predictions
+                print('different model')
+
+                # predictions = trained_model.predict_proba(st.session_state['X_test'])
+                probabilities = trained_model.predict_proba(st.session_state['X_test'])[:, 1]
+                # st.session_state['predictions'] = predictions
+                st.session_state['probabilities'] = probabilities
                 st.success("Model trained. View predictions and metrics below.")
 
     # Show additional results or metrics
