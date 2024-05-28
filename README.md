@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Team-4 Nurse Attrition Analysis in American Healthcare
  Team 4's group project GitHub repository for MGT 6203 (Edx) Spring of 2024 semester.
 
@@ -52,3 +53,6 @@ Team 4: Ginger de Ridder, Ying Jiang, Chiu Hsuan Chang, Bhoomi Ponkiya.
 
 ## License
 This project is licensed under the terms of the MIT license.
+=======
+# Team_4_streamlit
+>>>>>>> eaba60da6d35ac67cec30a75b4212fa2344f86c1
